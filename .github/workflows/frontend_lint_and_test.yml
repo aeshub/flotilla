@@ -21,11 +21,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2    
-    - name: Prettier Action
-      uses: creyD/prettier_action@v4.2
-      with:
-        dry: true
-        prettier_options: --check
     #- name: Run ESLint
     #  run: npx eslint .. --ext .js,.jsx,.ts,.tsx
     
@@ -37,3 +32,9 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    
+    - name: Prettier Action
+      uses: creyD/prettier_action@v4.2
+      with:
+        dry: true
+        prettier_options: --check
