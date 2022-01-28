@@ -26,6 +26,7 @@ jobs:
       with:
         dry: true
         prettier_options: --check
+        working_directory: frontend/
     #- name: Run ESLint
     #  run: npx eslint .. --ext .js,.jsx,.ts,.tsx
     
