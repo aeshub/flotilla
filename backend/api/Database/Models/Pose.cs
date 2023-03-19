@@ -112,7 +112,7 @@ namespace Api.Database.Models
         {
             Position = new Position();
             Orientation = new Orientation();
-            Frame = "defaultFrame";
+            Frame = "asset";
         }
 
         public Pose(
