@@ -4,6 +4,7 @@ using Api.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(FlotillaDbContext))]
-    partial class FlotillaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230920085736_ChangeDeckAreToOneToMany")]
+    partial class ChangeDeckAreToOneToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,7 +77,9 @@ namespace Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DefaultLocalizationAreaId");
+                    b.HasIndex("DefaultLocalizationAreaId")
+                        .IsUnique()
+                        .HasFilter("[DefaultLocalizationAreaId] IS NOT NULL");
 
                     b.HasIndex("InstallationId");
 
@@ -559,8 +564,9 @@ namespace Api.Migrations
             modelBuilder.Entity("Api.Database.Models.Deck", b =>
                 {
                     b.HasOne("Api.Database.Models.Area", "DefaultLocalizationArea")
-                        .WithMany()
-                        .HasForeignKey("DefaultLocalizationAreaId");
+                        .WithOne()
+                        .HasForeignKey("Api.Database.Models.Deck", "DefaultLocalizationAreaId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Api.Database.Models.Installation", "Installation")
                         .WithMany()
