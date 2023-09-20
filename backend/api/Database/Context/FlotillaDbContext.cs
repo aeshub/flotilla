@@ -98,7 +98,7 @@ namespace Api.Database.Context
                 a.PlantCode
             }).IsUnique();
 
-            modelBuilder.Entity<Area>().HasOne(a => a.Deck).WithOne().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Area>().HasOne(a => a.Deck).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Area>().HasOne(a => a.Plant).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Area>().HasOne(a => a.Installation).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Deck>().HasOne(d => d.Plant).WithMany().OnDelete(DeleteBehavior.Restrict);
