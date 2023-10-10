@@ -14,7 +14,7 @@ namespace Api.Services.ActionServices
     {
         private readonly IAreaService _areaService;
         private readonly ICustomMissionService _customMissionService;
-        private readonly ILogger<MissionSchedulingService> _logger;
+        private readonly ILogger<CustomMissionSchedulingService> _logger;
         private readonly IMapService _mapService;
         private readonly IMissionDefinitionService _missionDefinitionService;
         private readonly IMissionRunService _missionRunService;
@@ -22,7 +22,7 @@ namespace Api.Services.ActionServices
         private readonly ISourceService _sourceService;
 
         public CustomMissionSchedulingService(
-            ILogger<MissionSchedulingService> logger,
+            ILogger<CustomMissionSchedulingService> logger,
             ICustomMissionService customMissionService,
             IAreaService areaService,
             ISourceService sourceService,

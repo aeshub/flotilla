@@ -16,12 +16,14 @@ namespace Api.Controllers
         private readonly IInstallationService _installationService;
         private readonly ICustomMissionService _customMissionService;
         private readonly IEchoService _echoService;
+        private readonly ILocalizationService _localizationService;
         private readonly ILogger<MissionSchedulingController> _logger;
         private readonly IMapService _mapService;
         private readonly IMissionDefinitionService _missionDefinitionService;
         private readonly IMissionRunService _missionRunService;
         private readonly ICustomMissionSchedulingService _customMissionSchedulingService;
         private readonly IRobotService _robotService;
+        private readonly Mutex _scheduleLocalizationMutex = new();
         private readonly ISourceService _sourceService;
         private readonly IStidService _stidService;
 
@@ -36,6 +38,7 @@ namespace Api.Controllers
             ILogger<MissionSchedulingController> logger,
             IMapService mapService,
             IStidService stidService,
+            ILocalizationService localizationService,
             ISourceService sourceService,
             ICustomMissionSchedulingService customMissionSchedulingService
         )
@@ -49,6 +52,7 @@ namespace Api.Controllers
             _customMissionService = customMissionService;
             _mapService = mapService;
             _stidService = stidService;
+            _localizationService = localizationService;
             _sourceService = sourceService;
             _missionDefinitionService = missionDefinitionService;
             _customMissionSchedulingService = customMissionSchedulingService;
@@ -74,19 +78,25 @@ namespace Api.Controllers
         )
         {
             var robot = await _robotService.ReadById(scheduledMissionQuery.RobotId);
-            if (robot is null)
-            {
-                return NotFound($"Could not find robot with id {scheduledMissionQuery.RobotId}");
-            }
+            if (robot is null) { return NotFound($"Could not find robot with id {scheduledMissionQuery.RobotId}"); }
 
             var missionDefinition = await _missionDefinitionService.ReadById(scheduledMissionQuery.MissionDefinitionId);
-            if (missionDefinition == null)
-            {
-                return NotFound("Mission definition not found");
-            }
+            if (missionDefinition == null) { return NotFound("Mission definition not found"); }
 
-            List<MissionTask>? missionTasks;
-            missionTasks = await _missionDefinitionService.GetTasksFromSource(missionDefinition.Source, missionDefinition.InstallationCode);
+            try { await _localizationService.EnsureRobotIsOnSameInstallationAsMission(robot, missionDefinition); }
+            catch (InstallationNotFoundException e) { return NotFound(e.Message); }
+            catch (MissionException e) { return Conflict(e.Message); }
+
+            var missionTasks = await _missionDefinitionService.GetTasksFromSource(missionDefinition.Source, missionDefinition.InstallationCode);
+
+            _scheduleLocalizationMutex.WaitOne();
+
+            try { await _localizationService.EnsureRobotIsCorrectlyLocalized(robot, missionDefinition); }
+            catch (Exception e) when (e is AreaNotFoundException or DeckNotFoundException) { return NotFound(e.Message); }
+            catch (Exception e) when (e is RobotNotAvailableException or RobotLocalizationException) { return Conflict(e.Message); }
+            catch (IsarCommunicationException e) { return StatusCode(StatusCodes.Status502BadGateway, e.Message); }
+
+            finally { _scheduleLocalizationMutex.ReleaseMutex(); }
 
             if (missionTasks == null)
             {
@@ -104,7 +114,7 @@ namespace Api.Controllers
                 Tasks = missionTasks,
                 InstallationCode = missionDefinition.InstallationCode,
                 Area = missionDefinition.Area,
-                Map = new MapMetadata()
+                Map = missionDefinition.Area?.MapMetadata ?? new MapMetadata()
             };
 
             await _mapService.AssignMapToMission(missionRun);
@@ -290,6 +300,19 @@ namespace Api.Controllers
             MissionDefinition? customMissionDefinition;
             try { customMissionDefinition = await _customMissionSchedulingService.FindExistingOrCreateCustomMissionDefinition(customMissionQuery, missionTasks); }
             catch (SourceException e) { return StatusCode(StatusCodes.Status502BadGateway, e.Message); }
+
+            try { await _localizationService.EnsureRobotIsOnSameInstallationAsMission(robot, customMissionDefinition); }
+            catch (InstallationNotFoundException e) { return NotFound(e.Message); }
+            catch (MissionException e) { return Conflict(e.Message); }
+
+            _scheduleLocalizationMutex.WaitOne();
+
+            try { await _localizationService.EnsureRobotIsCorrectlyLocalized(robot, customMissionDefinition); }
+            catch (Exception e) when (e is AreaNotFoundException or DeckNotFoundException) { return NotFound(e.Message); }
+            catch (Exception e) when (e is RobotNotAvailableException or RobotLocalizationException) { return Conflict(e.Message); }
+            catch (IsarCommunicationException e) { return StatusCode(StatusCodes.Status502BadGateway, e.Message); }
+
+            finally { _scheduleLocalizationMutex.ReleaseMutex(); }
 
             MissionRun? newMissionRun;
             try { newMissionRun = await _customMissionSchedulingService.QueueCustomMissionRun(customMissionQuery, customMissionDefinition.Id, robot.Id, missionTasks); }

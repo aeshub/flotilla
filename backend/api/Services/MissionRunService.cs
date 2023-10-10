@@ -26,6 +26,8 @@ namespace Api.Services
 
         public Task<MissionRun?> ReadNextScheduledEmergencyMissionRun(string robotId);
 
+        public Task<MissionRun?> ReadLastExecutedMissionRunByRobot(string robotId);
+
         public Task<MissionRun> Update(MissionRun mission);
 
         public Task<MissionRun> UpdateMissionRunStatusByIsarMissionId(
@@ -34,6 +36,8 @@ namespace Api.Services
         );
 
         public Task<MissionRun?> Delete(string id);
+
+        public Task<bool> OngoingMission(string robotId);
     }
 
     [SuppressMessage(
@@ -138,6 +142,14 @@ namespace Api.Services
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<MissionRun?> ReadLastExecutedMissionRunByRobot(string robotId)
+        {
+            return await GetMissionRunsWithSubModels()
+                .Where(m => m.Robot.Id == robotId)
+                .OrderByDescending(m => m.EndTime)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<MissionRun> Update(MissionRun missionRun)
         {
             _context.Entry(missionRun.Robot).State = EntityState.Unchanged;
@@ -163,6 +175,23 @@ namespace Api.Services
             _ = _signalRService.SendMessageAsync("Mission run deleted", missionRun);
 
             return missionRun;
+        }
+
+        public async Task<bool> OngoingMission(string robotId)
+        {
+            var ongoingMissions = await ReadAll(
+                new MissionRunQueryStringParameters
+                {
+                    Statuses = new List<MissionStatus>
+                    {
+                        MissionStatus.Ongoing
+                    },
+                    RobotId = robotId,
+                    OrderBy = "DesiredStartTime",
+                    PageSize = 100
+                });
+
+            return ongoingMissions.Any();
         }
 
         private IQueryable<MissionRun> GetMissionRunsWithSubModels()

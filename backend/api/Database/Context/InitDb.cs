@@ -39,7 +39,8 @@ namespace Api.Database.Context
                 TagId = "Tagid here",
                 EchoTagLink = new Uri("https://www.I-am-echo-stid-tag-url.com"),
                 InspectionTarget = new Position(),
-                RobotPose = new Pose()
+                RobotPose = new Pose(),
+                Type = "inspection"
             };
 
         private static List<Installation> GetInstallations()
@@ -51,9 +52,16 @@ namespace Api.Database.Context
                 InstallationCode = "JSV"
             };
 
+            var installation2 = new Installation
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Kårstø",
+                InstallationCode = "KAA"
+            };
+
             return new List<Installation>(new[]
             {
-                installation1
+                installation1, installation2
             });
         }
 
@@ -67,9 +75,17 @@ namespace Api.Database.Context
                 PlantCode = "P1"
             };
 
+            var plant2 = new Plant
+            {
+                Id = Guid.NewGuid().ToString(),
+                Installation = installations[0],
+                Name = "Kårstø",
+                PlantCode = "Kårstø"
+            };
+
             return new List<Plant>(new[]
             {
-                plant1
+                plant1, plant2
             });
         }
 
@@ -152,10 +168,7 @@ namespace Api.Database.Context
                 Name = "testArea",
                 MapMetadata = new MapMetadata(),
                 DefaultLocalizationPose = new DefaultLocalizationPose(),
-                SafePositions = new List<SafePosition>
-                {
-                    new()
-                }
+                SafePositions = new List<SafePosition>()
             };
 
             var area4 = new Area
@@ -437,13 +450,7 @@ namespace Api.Database.Context
                 Status = TaskStatus.Cancelled
             };
 
-            return new List<MissionTask>
-            {
-                task1,
-                task2,
-                task3,
-                task4
-            };
+            return new List<MissionTask> { task1, task2, task3, task4 };
         }
 
         private static List<MissionRun> GetMissionRuns()
@@ -606,10 +613,7 @@ namespace Api.Database.Context
                 var task = ExampleTask;
                 task.Inspections.Add(Inspection);
                 task.Inspections.Add(Inspection2);
-                var tasks = new List<MissionTask>
-                {
-                    task
-                };
+                var tasks = new List<MissionTask> { task };
                 missionRun.Tasks = tasks;
             }
             context.AddRange(robots);
@@ -619,6 +623,7 @@ namespace Api.Database.Context
             context.AddRange(plants);
             context.AddRange(decks);
             context.AddRange(areas);
+
             context.SaveChanges();
         }
     }
