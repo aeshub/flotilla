@@ -147,9 +147,7 @@ namespace Api.Services
                 {
                     var condensedEchoMissionDefinition = new CondensedEchoMissionDefinition
                     {
-                        EchoMissionId = echoMission.Id,
-                        Name = echoMission.Name,
-                        InstallationCode = echoMission.InstallationCode
+                        EchoMissionId = echoMission.Id, Name = echoMission.Name, InstallationCode = echoMission.InstallationCode
                     };
                     availableMissions.Add(condensedEchoMissionDefinition);
                 }
@@ -208,8 +206,7 @@ namespace Api.Services
 
                 var echoPlantInfo = new EchoPlantInfo
                 {
-                    PlantCode = plant.InstallationCode,
-                    ProjectDescription = plant.ProjectDescription
+                    PlantCode = plant.InstallationCode, ProjectDescription = plant.ProjectDescription
                 };
 
                 echoPlantInfos.Add(echoPlantInfo);
