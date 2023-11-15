@@ -36,6 +36,9 @@ namespace Api.Services.Models
         [JsonPropertyName("id")]
         public string? Id { get; set; }
 
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
         [JsonPropertyName("pose")]
         public IsarPose Pose { get; set; }
 
@@ -48,6 +51,7 @@ namespace Api.Services.Models
         public IsarTaskDefinition(MissionTask missionTask, MissionRun missionRun)
         {
             Id = missionTask.IsarTaskId;
+            Type = missionTask.Type;
             Pose = new IsarPose(missionTask.RobotPose);
             Tag = missionTask.TagId;
             var isarInspections = new List<IsarInspectionDefinition>();
@@ -89,13 +93,27 @@ namespace Api.Services.Models
             Duration = inspection.VideoDuration;
             var metadata = new Dictionary<string, string?>
             {
-                { "map", missionRun.Map?.MapName },
-                { "description", missionRun.Description },
-                { "estimated_duration", missionRun.EstimatedDuration.ToString() },
-                { "asset_code", missionRun.InstallationCode },
-                { "mission_name", missionRun.Name },
-                { "status_reason", missionRun.StatusReason },
-                { "analysis_type", inspection.AnalysisType?.ToString() }
+                {
+                    "map", missionRun.Map?.MapName
+                },
+                {
+                    "description", missionRun.Description
+                },
+                {
+                    "estimated_duration", missionRun.EstimatedDuration.ToString()
+                },
+                {
+                    "asset_code", missionRun.InstallationCode
+                },
+                {
+                    "mission_name", missionRun.Name
+                },
+                {
+                    "status_reason", missionRun.StatusReason
+                },
+                {
+                    "analysis_type", inspection.AnalysisType?.ToString()
+                }
             };
             Metadata = metadata;
         }

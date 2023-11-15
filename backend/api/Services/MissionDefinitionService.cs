@@ -24,6 +24,8 @@ namespace Api.Services
 
         public Task<List<MissionDefinition>> ReadBySourceId(string sourceId);
 
+        public Task<MissionDefinition> FindExistingOrCreateCustomMissionDefinition(CustomMissionQuery customMissionQuery, List<MissionTask> missionTasks);
+
         public Task<MissionDefinition> Update(MissionDefinition missionDefinition);
 
         public Task<MissionDefinition?> Delete(string id);
@@ -46,11 +48,13 @@ namespace Api.Services
     )]
     public class MissionDefinitionService : IMissionDefinitionService
     {
+        private readonly IAreaService _areaService;
         private readonly FlotillaDbContext _context;
         private readonly ICustomMissionService _customMissionService;
         private readonly IEchoService _echoService;
         private readonly ILogger<IMissionDefinitionService> _logger;
         private readonly ISignalRService _signalRService;
+        private readonly ISourceService _sourceService;
         private readonly IStidService _stidService;
 
         public MissionDefinitionService(
@@ -59,12 +63,16 @@ namespace Api.Services
             IStidService stidService,
             ICustomMissionService customMissionService,
             ISignalRService signalRService,
-            ILogger<IMissionDefinitionService> logger)
+            IAreaService areaService,
+            ISourceService sourceService,
+            ILogger<MissionDefinitionService> logger)
         {
             _context = context;
             _echoService = echoService;
             _stidService = stidService;
             _customMissionService = customMissionService;
+            _areaService = areaService;
+            _sourceService = sourceService;
             _signalRService = signalRService;
             _logger = logger;
         }
@@ -179,25 +187,75 @@ namespace Api.Services
             }
         }
 
+        public async Task<MissionDefinition> FindExistingOrCreateCustomMissionDefinition(CustomMissionQuery customMissionQuery, List<MissionTask> missionTasks)
+        {
+            Area? area = null;
+            if (customMissionQuery.AreaName != null) { area = await _areaService.ReadByInstallationAndName(customMissionQuery.InstallationCode, customMissionQuery.AreaName); }
+
+            var source = await _sourceService.CheckForExistingCustomSource(missionTasks);
+
+            MissionDefinition? existingMissionDefinition = null;
+            if (source == null)
+            {
+                try
+                {
+                    string sourceUrl = await _customMissionService.UploadSource(missionTasks);
+                    source = new Source
+                    {
+                        SourceId = sourceUrl, Type = MissionSourceType.Custom
+                    };
+                }
+                catch (Exception e)
+                {
+                    {
+                        string errorMessage = $"Unable to upload source for mission {customMissionQuery.Name}";
+                        _logger.LogError(e, "{Message}", errorMessage);
+                        throw new SourceException(errorMessage);
+                    }
+                }
+            }
+            else
+            {
+                var missionDefinitions = await ReadBySourceId(source.SourceId);
+                if (missionDefinitions.Count > 0) { existingMissionDefinition = missionDefinitions.First(); }
+            }
+
+            var customMissionDefinition = existingMissionDefinition ?? new MissionDefinition
+            {
+                Id = Guid.NewGuid().ToString(),
+                Source = source,
+                Name = customMissionQuery.Name,
+                InspectionFrequency = customMissionQuery.InspectionFrequency,
+                InstallationCode = customMissionQuery.InstallationCode,
+                Area = area
+            };
+
+            if (existingMissionDefinition == null) { await Create(customMissionDefinition); }
+
+            return customMissionDefinition;
+        }
+
         private IQueryable<MissionDefinition> GetMissionDefinitionsWithSubModels()
         {
             return _context.MissionDefinitions
                 .Include(missionDefinition => missionDefinition.Area != null ? missionDefinition.Area.Deck : null)
                 .ThenInclude(deck => deck != null ? deck.Plant : null)
                 .ThenInclude(plant => plant != null ? plant.Installation : null)
+                .Include(missionDefinition => missionDefinition.Area)
                 .Include(missionDefinition => missionDefinition.Source)
                 .Include(missionDefinition => missionDefinition.LastSuccessfulRun)
                 .ThenInclude(missionRun => missionRun != null ? missionRun.Tasks : null)!
                 .ThenInclude(missionTask => missionTask.Inspections)
-                .ThenInclude(inspection => inspection.InspectionFindings);
+                .ThenInclude(inspection => inspection.InspectionFindings)
+                .Include(missionDefinition => missionDefinition.Area != null ? missionDefinition.Area.Deck : null)
+                .ThenInclude(deck => deck != null ? deck.DefaultLocalizationPose : null)
+                .ThenInclude(defaultLocalizationPose => defaultLocalizationPose != null ? defaultLocalizationPose.Pose : null);
         }
 
         private static void SearchByName(ref IQueryable<MissionDefinition> missionDefinitions, string? name)
         {
             if (!missionDefinitions.Any() || string.IsNullOrWhiteSpace(name))
-            {
                 return;
-            }
 
             missionDefinitions = missionDefinitions.Where(
                 missionDefinition =>

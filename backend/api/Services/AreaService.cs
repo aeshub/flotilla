@@ -84,11 +84,13 @@ namespace Api.Services
             var installation = await _installationService.ReadByName(installationCode);
             if (installation == null) { return null; }
 
-            return await _context.Areas.Where(a =>
-                    a.Installation != null && a.Installation.Id.Equals(installation.Id) &&
-                    a.Name.ToLower().Equals(areaName.ToLower())
-                ).Include(a => a.SafePositions).Include(a => a.Installation)
-                .Include(a => a.Plant).Include(a => a.Deck).FirstOrDefaultAsync();
+            return await _context.Areas.Where(a => a.Installation.Id.Equals(installation.Id) && a.Name.ToLower().Equals(areaName.ToLower()))
+                .Include(a => a.SafePositions)
+                .Include(a => a.Installation)
+                .Include(a => a.Plant)
+                .Include(a => a.Deck)
+                .ThenInclude(d => d != null ? d.DefaultLocalizationPose : null)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Area>> ReadByInstallation(string installationCode)
@@ -97,7 +99,7 @@ namespace Api.Services
             if (installation == null) { return new List<Area>(); }
 
             return await _context.Areas.Where(a =>
-                    a.Installation != null && a.Installation.Id.Equals(installation.Id)).Include(a => a.SafePositions).Include(a => a.Installation)
+                    a.Installation.Id.Equals(installation.Id)).Include(a => a.SafePositions).Include(a => a.Installation)
                 .Include(a => a.Plant).Include(a => a.Deck).ToListAsync();
         }
 
@@ -204,8 +206,7 @@ namespace Api.Services
             if (installation == null) { return null; }
 
             return await _context.Areas.Where(a =>
-                    a.Name.ToLower().Equals(areaName.ToLower()) &&
-                    a.Installation.InstallationCode.Equals(installation.InstallationCode)
+                    a.Name.ToLower().Equals(areaName.ToLower()) && a.Installation.Id.Equals(installation.Id)
                 ).Include(a => a.SafePositions).Include(a => a.Installation)
                 .Include(a => a.Plant).Include(a => a.Deck).FirstOrDefaultAsync();
         }
@@ -214,8 +215,8 @@ namespace Api.Services
         {
             return await _context.Areas.Where(a =>
                     a.Deck != null && a.Deck.Id.Equals(deck.Id) &&
-                    a.Plant != null && a.Plant.Id.Equals(plant.Id) &&
-                    a.Installation != null && a.Installation.Id.Equals(installation.Id) &&
+                    a.Plant.Id.Equals(plant.Id) &&
+                    a.Installation.Id.Equals(installation.Id) &&
                     a.Name.ToLower().Equals(areaName.ToLower())
                 ).Include(a => a.Deck).Include(d => d.Plant).Include(i => i.Installation)
                 .Include(a => a.SafePositions).FirstOrDefaultAsync();

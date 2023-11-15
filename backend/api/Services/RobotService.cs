@@ -37,9 +37,9 @@ namespace Api.Services
         private readonly FlotillaDbContext _context;
         private readonly ILogger<RobotService> _logger;
         private readonly IRobotModelService _robotModelService;
+        private readonly ISignalRService _signalRService;
 
         private readonly Semaphore _robotSemaphore = new(1, 1);
-        private readonly ISignalRService _signalRService;
 
         public RobotService(FlotillaDbContext context, ILogger<RobotService> logger, IRobotModelService robotModelService, ISignalRService signalRService)
         {
@@ -172,8 +172,8 @@ namespace Api.Services
             return _context.Robots
                 .Include(r => r.VideoStreams)
                 .Include(r => r.Model)
-                .Include(r => r.CurrentArea)
-                .ThenInclude(r => r != null ? r.SafePositions : null);
+                .Include(r => r.CurrentArea != null ? r.CurrentArea.Deck : null)
+                .ThenInclude(d => d.DefaultLocalizationPose != null ? d.DefaultLocalizationPose.Pose : null);
         }
 
         private IQueryable<Robot> GetEnabledRobotsWithSubModels()
