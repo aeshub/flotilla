@@ -8,7 +8,8 @@ namespace Api.Services.ActionServices
         public Task UpdateAverageDurationPerTask(RobotType robotType);
     }
 
-    public class TaskDurationService(ILogger<TaskDurationService> logger, IConfiguration configuration, IRobotModelService robotModelService, IMissionRunService missionRunService) : ITaskDurationService
+    public class TaskDurationService
+        (ILogger<TaskDurationService> logger, IConfiguration configuration, IRobotModelService robotModelService, IMissionRunService missionRunService) : ITaskDurationService
     {
         public async Task UpdateAverageDurationPerTask(RobotType robotType)
         {

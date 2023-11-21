@@ -3,22 +3,21 @@ using Api.Database.Models;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 namespace Api.Controllers
 {
     [ApiController]
     [Route("plants")]
     public class PlantController(
-            ILogger<PlantController> logger,
-            IPlantService plantService,
-            IInstallationService installationService
-        ) : ControllerBase
+        ILogger<PlantController> logger,
+        IPlantService plantService,
+        IInstallationService installationService
+    ) : ControllerBase
     {
         /// <summary>
-        /// List all plants in the Flotilla database
+        ///     List all plants in the Flotilla database
         /// </summary>
         /// <remarks>
-        /// <para> This query gets all plants </para>
+        ///     <para> This query gets all plants </para>
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = Role.Any)]
@@ -42,7 +41,7 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Lookup plant by specified id.
+        ///     Lookup plant by specified id.
         /// </summary>
         [HttpGet]
         [Authorize(Roles = Role.Any)]
@@ -57,8 +56,7 @@ namespace Api.Controllers
             try
             {
                 var plant = await plantService.ReadById(id);
-                if (plant == null)
-                    return NotFound($"Could not find plant with id {id}");
+                if (plant == null) return NotFound($"Could not find plant with id {id}");
                 return Ok(plant);
             }
             catch (Exception e)
@@ -70,10 +68,10 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Add a new plant
+        ///     Add a new plant
         /// </summary>
         /// <remarks>
-        /// <para> This query adds a new plant to the database </para>
+        ///     <para> This query adds a new plant to the database </para>
         /// </remarks>
         [HttpPost]
         [Authorize(Roles = Role.Admin)]
@@ -96,7 +94,7 @@ namespace Api.Controllers
                 if (existingPlant != null)
                 {
                     logger.LogInformation("A plant for given name and plant already exists");
-                    return BadRequest($"Plant already exists");
+                    return BadRequest("Plant already exists");
                 }
 
                 var newPlant = await plantService.Create(plant);
@@ -118,7 +116,7 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Deletes the plant with the specified id from the database.
+        ///     Deletes the plant with the specified id from the database.
         /// </summary>
         [HttpDelete]
         [Authorize(Roles = Role.Admin)]
@@ -131,8 +129,7 @@ namespace Api.Controllers
         public async Task<ActionResult<Plant>> DeletePlant([FromRoute] string id)
         {
             var plant = await plantService.Delete(id);
-            if (plant is null)
-                return NotFound($"Plant with id {id} not found");
+            if (plant is null) return NotFound($"Plant with id {id} not found");
             return Ok(plant);
         }
     }

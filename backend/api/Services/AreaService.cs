@@ -40,13 +40,10 @@ namespace Api.Services
         Justification = "Entity framework does not support translating culture info to SQL calls"
     )]
     public class AreaService(
-            FlotillaDbContext context, IInstallationService installationService, IPlantService plantService, IDeckService deckService,
-            IDefaultLocalizationPoseService defaultLocalizationPoseService) : IAreaService
+        FlotillaDbContext context, IInstallationService installationService, IPlantService plantService, IDeckService deckService,
+        IDefaultLocalizationPoseService defaultLocalizationPoseService) : IAreaService
     {
-        public async Task<IEnumerable<Area>> ReadAll()
-        {
-            return await GetAreas().ToListAsync();
-        }
+        public async Task<IEnumerable<Area>> ReadAll() { return await GetAreas().ToListAsync(); }
 
         public async Task<Area?> ReadById(string id)
         {

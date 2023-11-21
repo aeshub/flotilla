@@ -207,15 +207,9 @@ namespace Api.Services
             }
         }
 
-        private static string GetColumnNames<T>(T entity) where T : TimeseriesBase
-        {
-            return GetContentNames(entity, "\"", "\"");
-        }
+        private static string GetColumnNames<T>(T entity) where T : TimeseriesBase { return GetContentNames(entity, "\"", "\""); }
 
-        private static string GetValueNames<T>(T entity) where T : TimeseriesBase
-        {
-            return GetContentNames(entity, "@");
-        }
+        private static string GetValueNames<T>(T entity) where T : TimeseriesBase { return GetContentNames(entity, "@"); }
 
         private static string GetContentNames<T>(
             T entity,

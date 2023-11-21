@@ -8,17 +8,17 @@ namespace Api.Test.Mocks
 {
     public class MockEchoService : IEchoService
     {
-        private readonly List<EchoPlantInfo> _mockEchoPlantInfo = [
+        private readonly List<EchoPlantInfo> _mockEchoPlantInfo =  [
             new EchoPlantInfo
-            {
-                PlantCode = "testInstallation",
-                ProjectDescription = "testInstallation"
-            },
-            new EchoPlantInfo
-            {
-                PlantCode = "JSV",
-                ProjectDescription = "JSVtestInstallation"
-            }
+        {
+            PlantCode = "testInstallation",
+            ProjectDescription = "testInstallation"
+        },
+        new EchoPlantInfo
+        {
+            PlantCode = "JSV",
+            ProjectDescription = "JSVtestInstallation"
+        }
         ];
 
         public EchoMission MockEchoMission =
@@ -56,9 +56,6 @@ namespace Api.Test.Mocks
             return _mockEchoPlantInfo;
         }
 
-        public Task<EchoMission> GetMissionByPath(string relativePath)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<EchoMission> GetMissionByPath(string relativePath) { throw new NotImplementedException(); }
     }
 }

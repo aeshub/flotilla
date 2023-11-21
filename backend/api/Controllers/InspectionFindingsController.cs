@@ -9,9 +9,9 @@ namespace Api.Controllers
     [ApiController]
     [Route("inspection-findings")]
     public class InspectionFindingsController(
-            ILogger<InspectionFindingsController> logger,
-            IInspectionService inspectionService
-        ) : ControllerBase
+        ILogger<InspectionFindingsController> logger,
+        IInspectionService inspectionService
+    ) : ControllerBase
     {
         /// <summary>
         /// Associate a new inspection finding with the inspection corresponding to isarStepId
@@ -38,7 +38,6 @@ namespace Api.Controllers
                 {
                     return Ok(inspection.InspectionFindings);
                 }
-
             }
             catch (Exception e)
             {
@@ -72,7 +71,6 @@ namespace Api.Controllers
                 {
                     return Ok(inspection);
                 }
-
             }
             catch (Exception e)
             {

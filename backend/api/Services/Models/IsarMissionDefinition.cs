@@ -142,12 +142,12 @@ namespace Api.Services.Models
 
         [JsonPropertyName("orientation")]
         public IsarOrientation Orientation { get; } = new IsarOrientation(
-                pose.Orientation.X,
-                pose.Orientation.Y,
-                pose.Orientation.Z,
-                pose.Orientation.W,
-                "asset"
-            );
+            pose.Orientation.X,
+            pose.Orientation.Y,
+            pose.Orientation.Z,
+            pose.Orientation.W,
+            "asset"
+        );
 
         [JsonPropertyName("frame_name")]
         public string FrameName { get; } = "asset";

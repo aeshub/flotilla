@@ -11,18 +11,18 @@ namespace Api.Controllers
     [ApiController]
     [Route("missions")]
     public class MissionSchedulingController(
-            IMissionDefinitionService missionDefinitionService,
-            IMissionRunService missionRunService,
-            IAreaService areaService,
-            IInstallationService installationService,
-            IRobotService robotService,
-            IEchoService echoService,
-            ILogger<MissionSchedulingController> logger,
-            IMapService mapService,
-            IStidService stidService,
-            ISourceService sourceService,
-            ICustomMissionSchedulingService customMissionSchedulingService
-        ) : ControllerBase
+        IMissionDefinitionService missionDefinitionService,
+        IMissionRunService missionRunService,
+        IAreaService areaService,
+        IInstallationService installationService,
+        IRobotService robotService,
+        IEchoService echoService,
+        ILogger<MissionSchedulingController> logger,
+        IMapService mapService,
+        IStidService stidService,
+        ISourceService sourceService,
+        ICustomMissionSchedulingService customMissionSchedulingService
+    ) : ControllerBase
     {
         /// <summary>
         ///     Schedule an existing mission definition
@@ -249,10 +249,10 @@ namespace Api.Controllers
         )
         {
             var robot = await robotService.ReadById(customMissionQuery.RobotId);
-            if (robot is null) { return NotFound($"Could not find robot with id {customMissionQuery.RobotId}"); }
+            if (robot is null) return NotFound($"Could not find robot with id {customMissionQuery.RobotId}");
 
             var installation = await installationService.ReadByName(customMissionQuery.InstallationCode);
-            if (installation == null) { return NotFound($"Could not find installation with name {customMissionQuery.InstallationCode}"); }
+            if (installation == null) return NotFound($"Could not find installation with name {customMissionQuery.InstallationCode}");
 
             var missionTasks = customMissionQuery.Tasks.Select(task => new MissionTask(task)).ToList();
 

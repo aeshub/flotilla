@@ -12,14 +12,8 @@ namespace Api.Database.Models
 
         public Pose Pose { get; set; }
 
-        public DefaultLocalizationPose()
-        {
-            Pose = new Pose();
-        }
+        public DefaultLocalizationPose() { Pose = new Pose(); }
 
-        public DefaultLocalizationPose(Pose pose)
-        {
-            Pose = pose;
-        }
+        public DefaultLocalizationPose(Pose pose) { Pose = pose; }
     }
 }

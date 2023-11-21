@@ -55,10 +55,7 @@ namespace Api.Services
             );
         }
 
-        private DbSet<Source> GetSources()
-        {
-            return context.Sources;
-        }
+        private DbSet<Source> GetSources() { return context.Sources; }
 
         public async Task<Source?> ReadById(string id)
         {
@@ -116,10 +113,7 @@ namespace Api.Services
             }
         }
 
-        public async Task<Source?> CheckForExistingEchoSource(int echoId)
-        {
-            return await ReadBySourceId(echoId.ToString(CultureInfo.CurrentCulture));
-        }
+        public async Task<Source?> CheckForExistingEchoSource(int echoId) { return await ReadBySourceId(echoId.ToString(CultureInfo.CurrentCulture)); }
 
         public async Task<Source?> CheckForExistingCustomSource(IList<MissionTask> tasks)
         {

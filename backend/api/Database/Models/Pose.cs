@@ -41,10 +41,7 @@ namespace Api.Database.Models
             return true;
         }
 
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
+        public override int GetHashCode() { throw new NotImplementedException(); }
     }
 
     [Owned]
@@ -81,10 +78,7 @@ namespace Api.Database.Models
             return true;
         }
 
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
+        public override int GetHashCode() { throw new NotImplementedException(); }
     }
 
     [Owned]

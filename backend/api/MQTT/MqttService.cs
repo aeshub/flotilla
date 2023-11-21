@@ -31,9 +31,9 @@ namespace Api.Mqtt
         private static readonly JsonSerializerOptions serializerOptions = new()
         {
             Converters =
-                {
-                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-                }
+            {
+                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+            }
         };
 
         private CancellationToken _cancellationToken;

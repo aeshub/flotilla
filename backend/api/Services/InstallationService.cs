@@ -33,15 +33,9 @@ namespace Api.Services
     )]
     public class InstallationService(FlotillaDbContext context) : IInstallationService
     {
-        public async Task<IEnumerable<Installation>> ReadAll()
-        {
-            return await GetInstallations().ToListAsync();
-        }
+        public async Task<IEnumerable<Installation>> ReadAll() { return await GetInstallations().ToListAsync(); }
 
-        private DbSet<Installation> GetInstallations()
-        {
-            return context.Installations;
-        }
+        private DbSet<Installation> GetInstallations() { return context.Installations; }
 
         public async Task<Installation?> ReadById(string id)
         {

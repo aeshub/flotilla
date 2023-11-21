@@ -49,10 +49,7 @@ namespace Api.EventHandlers
             EmergencyActionService.EmergencyButtonDepressedForRobot -= OnEmergencyButtonDepressedForRobot;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            await stoppingToken;
-        }
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken) { await stoppingToken; }
 
         private async void OnMissionRunCreated(object? sender, MissionRunCreatedEventArgs e)
         {

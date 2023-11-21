@@ -9,9 +9,9 @@ namespace Api.Controllers
     [ApiController]
     [Route("installations")]
     public class InstallationController(
-            ILogger<InstallationController> logger,
-            IInstallationService installationService
-        ) : ControllerBase
+        ILogger<InstallationController> logger,
+        IInstallationService installationService
+    ) : ControllerBase
     {
         /// <summary>
         /// List all installations in the Flotilla database

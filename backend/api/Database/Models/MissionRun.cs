@@ -48,11 +48,7 @@ namespace Api.Database.Models
 
         // The tasks are always returned ordered by their order field
         [Required]
-        public IList<MissionTask> Tasks
-        {
-            get => _tasks.OrderBy(t => t.TaskOrder).ToList();
-            set => _tasks = value;
-        }
+        public IList<MissionTask> Tasks { get => _tasks.OrderBy(t => t.TaskOrder).ToList(); set => _tasks = value; }
 
         [Required]
         public MissionRunPriority MissionRunPriority { get; set; }

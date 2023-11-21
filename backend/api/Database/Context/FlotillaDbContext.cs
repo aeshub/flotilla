@@ -96,10 +96,7 @@ namespace Api.Database.Context
             modelBuilder.Entity<Plant>().HasOne(p => p.Installation).WithMany().OnDelete(DeleteBehavior.Restrict);
         }
 
-        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-        {
-            configurationBuilder.Properties(typeof(Enum)).HaveConversion<string>();
-        }
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) { configurationBuilder.Properties(typeof(Enum)).HaveConversion<string>(); }
 
         private static void AddConverterForDateTimeOffsets<T>(ref EntityTypeBuilder<T> entity)
             where T : class

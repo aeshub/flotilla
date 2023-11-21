@@ -45,11 +45,11 @@ namespace Api.Services
         Justification = "Entity framework does not support translating culture info to SQL calls"
     )]
     public class MissionDefinitionService(FlotillaDbContext context,
-            IEchoService echoService,
-            IStidService stidService,
-            ICustomMissionService customMissionService,
-            ISignalRService signalRService,
-            ILogger<IMissionDefinitionService> logger) : IMissionDefinitionService
+        IEchoService echoService,
+        IStidService stidService,
+        ICustomMissionService customMissionService,
+        ISignalRService signalRService,
+        ILogger<IMissionDefinitionService> logger) : IMissionDefinitionService
     {
         public async Task<MissionDefinition> Create(MissionDefinition missionDefinition)
         {

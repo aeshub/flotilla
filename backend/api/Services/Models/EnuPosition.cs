@@ -12,9 +12,6 @@ namespace Api.Services.Models
         [JsonPropertyName("u")]
         public float Up { get; } = up;
 
-        public Position ToPosition()
-        {
-            return new Position(East, North, Up);
-        }
+        public Position ToPosition() { return new Position(East, North, Up); }
     }
 }

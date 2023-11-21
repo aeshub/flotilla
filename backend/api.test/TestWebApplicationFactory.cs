@@ -16,8 +16,8 @@ namespace Api.Test
             string projectDir = Directory.GetCurrentDirectory();
             string configPath = Path.Combine(projectDir, "appsettings.Test.json");
             var configuration = new ConfigurationBuilder()
-                            .AddJsonFile(configPath)
-                            .Build();
+                .AddJsonFile(configPath)
+                .Build();
             builder.UseEnvironment("Test");
             builder.ConfigureAppConfiguration(
                 (context, config) =>

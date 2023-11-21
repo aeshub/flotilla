@@ -42,20 +42,11 @@ namespace Api.EventHandlers
         private IMissionRunService MissionRunService =>
             _scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IMissionRunService>();
 
-        public override void Subscribe()
-        {
-            MqttService.MqttIsarRobotHeartbeatReceived += OnIsarRobotHeartbeat;
-        }
+        public override void Subscribe() { MqttService.MqttIsarRobotHeartbeatReceived += OnIsarRobotHeartbeat; }
 
-        public override void Unsubscribe()
-        {
-            MqttService.MqttIsarRobotHeartbeatReceived -= OnIsarRobotHeartbeat;
-        }
+        public override void Unsubscribe() { MqttService.MqttIsarRobotHeartbeatReceived -= OnIsarRobotHeartbeat; }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            await stoppingToken;
-        }
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken) { await stoppingToken; }
 
         private async void OnIsarRobotHeartbeat(object? sender, MqttReceivedArgs mqttArgs)
         {

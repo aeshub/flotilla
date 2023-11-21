@@ -27,7 +27,7 @@ namespace Api.Services
     }
 
     public class MissionSchedulingService(ILogger<MissionSchedulingService> logger, IMissionRunService missionRunService, IRobotService robotService, RobotController robotController,
-            IAreaService areaService, IIsarService isarService) : IMissionSchedulingService
+        IAreaService areaService, IIsarService isarService) : IMissionSchedulingService
     {
         public async Task StartMissionRunIfSystemIsAvailable(string missionRunId)
         {
@@ -172,15 +172,9 @@ namespace Api.Services
             await missionRunService.Create(missionRun);
         }
 
-        public bool MissionRunQueueIsEmpty(IList<MissionRun> missionRunQueue)
-        {
-            return !missionRunQueue.Any();
-        }
+        public bool MissionRunQueueIsEmpty(IList<MissionRun> missionRunQueue) { return !missionRunQueue.Any(); }
 
-        public void TriggerRobotAvailable(RobotAvailableEventArgs e)
-        {
-            OnRobotAvailable(e);
-        }
+        public void TriggerRobotAvailable(RobotAvailableEventArgs e) { OnRobotAvailable(e); }
         private async Task MoveInterruptedMissionsToQueue(IEnumerable<string> interruptedMissionRunIds)
         {
             foreach (string missionRunId in interruptedMissionRunIds)

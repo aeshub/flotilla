@@ -169,10 +169,7 @@ namespace Api.Services
                 .ThenInclude(task => task.Inspections);
         }
 
-        protected virtual void OnMissionRunCreated(MissionRunCreatedEventArgs e)
-        {
-            MissionRunCreated?.Invoke(this, e);
-        }
+        protected virtual void OnMissionRunCreated(MissionRunCreatedEventArgs e) { MissionRunCreated?.Invoke(this, e); }
 
         public static event EventHandler<MissionRunCreatedEventArgs>? MissionRunCreated;
 
@@ -279,14 +276,14 @@ namespace Api.Services
             Expression<Func<MissionRun, bool>> startTimeFilter = missionRun =>
                 missionRun.StartTime == null
                 || (DateTime.Compare(missionRun.StartTime.Value, minStartTime) >= 0
-                && DateTime.Compare(missionRun.StartTime.Value, maxStartTime) <= 0);
+                    && DateTime.Compare(missionRun.StartTime.Value, maxStartTime) <= 0);
 
             var minEndTime = DateTimeUtilities.UnixTimeStampToDateTime(parameters.MinEndTime);
             var maxEndTime = DateTimeUtilities.UnixTimeStampToDateTime(parameters.MaxEndTime);
             Expression<Func<MissionRun, bool>> endTimeFilter = missionRun =>
                 missionRun.EndTime == null
                 || (DateTime.Compare(missionRun.EndTime.Value, minEndTime) >= 0
-                && DateTime.Compare(missionRun.EndTime.Value, maxEndTime) <= 0);
+                    && DateTime.Compare(missionRun.EndTime.Value, maxEndTime) <= 0);
 
             var minDesiredStartTime = DateTimeUtilities.UnixTimeStampToDateTime(parameters.MinDesiredStartTime);
             var maxDesiredStartTime = DateTimeUtilities.UnixTimeStampToDateTime(parameters.MaxDesiredStartTime);

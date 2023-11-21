@@ -22,9 +22,6 @@ namespace Api.Test.Mocks
             return pages;
         }
 
-        public async Task UploadJsonToBlob(string json, string path, string containerName, string accountName, bool overwrite = false)
-        {
-            await Task.CompletedTask;
-        }
+        public async Task UploadJsonToBlob(string json, string path, string containerName, string accountName, bool overwrite = false) { await Task.CompletedTask; }
     }
 }

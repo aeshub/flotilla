@@ -15,10 +15,7 @@ namespace Api.Test.Mocks
             return new MapMetadata();
         }
 
-        public async Task AssignMapToMission(MissionRun mission)
-        {
-            await Task.Run(() => Thread.Sleep(1));
-        }
+        public async Task AssignMapToMission(MissionRun mission) { await Task.Run(() => Thread.Sleep(1)); }
 
         public async Task<byte[]> FetchMapImage(string mapName, string installationCode)
         {

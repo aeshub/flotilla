@@ -37,14 +37,8 @@ namespace Api.Database.Models
 
         public Pose Pose { get; set; }
 
-        public SafePosition()
-        {
-            Pose = new Pose();
-        }
+        public SafePosition() { Pose = new Pose(); }
 
-        public SafePosition(Pose pose)
-        {
-            Pose = pose;
-        }
+        public SafePosition(Pose pose) { Pose = pose; }
     }
 }

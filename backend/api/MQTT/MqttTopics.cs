@@ -70,9 +70,6 @@ namespace Api.Mqtt
         /// </summary>
         /// <param name="topic"></param>
         /// <returns></returns>
-        private static string ConvertTopicToRegex(string topic)
-        {
-            return topic.Replace('#', '*').Replace("+", "[^/\n]*", StringComparison.Ordinal);
-        }
+        private static string ConvertTopicToRegex(string topic) { return topic.Replace('#', '*').Replace("+", "[^/\n]*", StringComparison.Ordinal); }
     }
 }

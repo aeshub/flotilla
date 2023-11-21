@@ -11,15 +11,15 @@ namespace Api.Services.ActionServices
     }
 
     public class CustomMissionSchedulingService(
-            ILogger<MissionSchedulingService> logger,
-            ICustomMissionService customMissionService,
-            IAreaService areaService,
-            ISourceService sourceService,
-            IMissionDefinitionService missionDefinitionService,
-            IMissionRunService missionRunService,
-            IRobotService robotService,
-            IMapService mapService
-        ) : ICustomMissionSchedulingService
+        ILogger<MissionSchedulingService> logger,
+        ICustomMissionService customMissionService,
+        IAreaService areaService,
+        ISourceService sourceService,
+        IMissionDefinitionService missionDefinitionService,
+        IMissionRunService missionRunService,
+        IRobotService robotService,
+        IMapService mapService
+    ) : ICustomMissionSchedulingService
     {
         public async Task<MissionDefinition> FindExistingOrCreateCustomMissionDefinition(CustomMissionQuery customMissionQuery, List<MissionTask> missionTasks)
         {

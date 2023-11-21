@@ -132,7 +132,6 @@ namespace Api.EventHandlers
 
                 robot = await robotService.Update(robot);
                 _logger.LogInformation("Updated robot '{Id}' ('{RobotName}') in database: {Updates}", robot.Id, robot.Name, updatedFields);
-
             }
             catch (DbUpdateException e) { _logger.LogError(e, "Could not add robot to db"); }
             catch (Exception e) { _logger.LogError(e, "Could not update robot in db"); }

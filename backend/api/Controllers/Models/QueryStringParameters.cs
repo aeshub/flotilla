@@ -16,11 +16,7 @@
         /// <para>Defaults to '10' if left empty.</para>
         /// Max value is '1000'
         /// </summary>
-        public int PageSize
-        {
-            get { return _pageSize; }
-            set { _pageSize = (value > MaxPageSize) ? MaxPageSize : value; }
-        }
+        public int PageSize { get { return _pageSize; } set { _pageSize = (value > MaxPageSize) ? MaxPageSize : value; } }
 
         /// <summary>
         /// Can be ordered by several parameters.

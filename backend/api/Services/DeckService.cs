@@ -35,12 +35,10 @@ namespace Api.Services
         "CA1304:Specify CultureInfo",
         Justification = "Entity framework does not support translating culture info to SQL calls"
     )]
-    public class DeckService(FlotillaDbContext context, IDefaultLocalizationPoseService defaultLocalizationPoseService, IInstallationService installationService, IPlantService plantService) : IDeckService
+    public class DeckService(FlotillaDbContext context, IDefaultLocalizationPoseService defaultLocalizationPoseService, IInstallationService installationService,
+        IPlantService plantService) : IDeckService
     {
-        public async Task<IEnumerable<Deck>> ReadAll()
-        {
-            return await GetDecks().ToListAsync();
-        }
+        public async Task<IEnumerable<Deck>> ReadAll() { return await GetDecks().ToListAsync(); }
 
         public async Task<Deck?> ReadById(string id)
         {
@@ -132,9 +130,6 @@ namespace Api.Services
             return deck;
         }
 
-        private IQueryable<Deck> GetDecks()
-        {
-            return context.Decks.Include(p => p.Plant).Include(i => i.Installation).Include(d => d.DefaultLocalizationPose);
-        }
+        private IQueryable<Deck> GetDecks() { return context.Decks.Include(p => p.Plant).Include(i => i.Installation).Include(d => d.DefaultLocalizationPose); }
     }
 }

@@ -101,7 +101,7 @@ namespace Api.Test.Services
         }
 
         private static AxisAngle ConvertOrientation(Orientation orientation)
-        // This is the method used to convert predefined poses to the Angle-Axis representation used by Echo
+            // This is the method used to convert predefined poses to the Angle-Axis representation used by Echo
         {
             float qw = orientation.W;
             float angle = -2 * MathF.Acos(qw);

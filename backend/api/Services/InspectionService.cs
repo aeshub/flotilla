@@ -50,10 +50,7 @@ namespace Api.Services
             return await GetInspections().FirstOrDefaultAsync(inspection => inspection.IsarStepId != null && inspection.IsarStepId.Equals(id));
         }
 
-        private IQueryable<Inspection> GetInspections()
-        {
-            return context.Inspections.Include(inspection => inspection.InspectionFindings);
-        }
+        private IQueryable<Inspection> GetInspections() { return context.Inspections.Include(inspection => inspection.InspectionFindings); }
 
         public async Task<Inspection?> AddFindings(InspectionFindingsQuery inspectionFindingsQuery, string isarStepId)
         {

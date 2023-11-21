@@ -14,13 +14,10 @@ namespace Api.Services
     }
 
     public class MapService(ILogger<MapService> logger,
-            IOptions<MapBlobOptions> blobOptions,
-            IBlobService blobService) : IMapService
+        IOptions<MapBlobOptions> blobOptions,
+        IBlobService blobService) : IMapService
     {
-        public async Task<byte[]> FetchMapImage(string mapName, string installationCode)
-        {
-            return await blobService.DownloadBlob(mapName, installationCode, blobOptions.Value.StorageAccount);
-        }
+        public async Task<byte[]> FetchMapImage(string mapName, string installationCode) { return await blobService.DownloadBlob(mapName, installationCode, blobOptions.Value.StorageAccount); }
 
         public async Task<MapMetadata?> ChooseMapFromPositions(IList<Position> positions, string installationCode)
         {

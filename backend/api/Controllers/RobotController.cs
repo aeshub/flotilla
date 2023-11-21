@@ -11,13 +11,13 @@ namespace Api.Controllers
     [ApiController]
     [Route("robots")]
     public class RobotController(
-            ILogger<RobotController> logger,
-            IRobotService robotService,
-            IIsarService isarService,
-            IMissionRunService missionRunService,
-            IRobotModelService robotModelService,
-            IAreaService areaService
-        ) : ControllerBase
+        ILogger<RobotController> logger,
+        IRobotService robotService,
+        IIsarService isarService,
+        IMissionRunService missionRunService,
+        IRobotModelService robotModelService,
+        IAreaService areaService
+    ) : ControllerBase
     {
         /// <summary>
         ///     List all robots on the installation.
@@ -472,10 +472,9 @@ namespace Api.Controllers
             }
             catch (MissionNotFoundException)
             {
-                logger.LogWarning($"No mission was runnning for robot {robot.Id}");
+                logger.LogWarning("{Message}", $"No mission was running for robot {robot.Id}");
                 try { await robotService.UpdateCurrentMissionId(robotId, null); }
                 catch (RobotNotFoundException e) { return NotFound(e.Message); }
-
             }
             try { await robotService.UpdateCurrentMissionId(robotId, null); }
             catch (RobotNotFoundException e) { return NotFound(e.Message); }

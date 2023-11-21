@@ -198,28 +198,31 @@ namespace Api.Test
             string robotId = robot.Id;
 
             var query = new CustomMissionQuery
-            {
-                RobotId = robotId,
-                InstallationCode = installationCode,
-                AreaName = areaName,
-                DesiredStartTime = DateTime.SpecifyKind(new DateTime(3050, 1, 1), DateTimeKind.Utc),
-                InspectionFrequency = new TimeSpan(14, 0, 0, 0),
-                Name = testMissionName,
-                Tasks = [
+                {
+                    RobotId = robotId,
+                    InstallationCode = installationCode,
+                    AreaName = areaName,
+                    DesiredStartTime = DateTime.SpecifyKind(new DateTime(3050, 1, 1), DateTimeKind.Utc),
+                    InspectionFrequency = new TimeSpan(14, 0, 0, 0),
+                    Name = testMissionName,
+                    Tasks =  [
                     new()
                     {
-                        RobotPose = new Pose(),
-                        Inspections = [],
-                        InspectionTarget = new Position(),
-                        TaskOrder = 0
-                    },
-                    new()
-                    {
-                        RobotPose = new Pose(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f),
-                        Inspections = [],
-                        InspectionTarget = new Position(),
-                        TaskOrder = 1
-                    }
+                    RobotPose = new Pose(),
+                    Inspections =  [],
+                    InspectionTarget = new Position(),
+                    TaskOrder = 0
+                },
+ 
+
+
+            new()
+                {
+                    RobotPose = new Pose(1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f),
+                    Inspections =  [],
+                    InspectionTarget = new Position(),
+                    TaskOrder = 1
+                }
                 ]
             };
             var content = new StringContent(
@@ -275,21 +278,21 @@ namespace Api.Test
 
             string testMissionName = "testMissionNextRun";
             var query = new CustomMissionQuery
-            {
-                RobotId = robotId,
-                InstallationCode = installationCode,
-                AreaName = areaName,
-                DesiredStartTime = DateTime.SpecifyKind(new DateTime(3050, 1, 1), DateTimeKind.Utc),
-                InspectionFrequency = new TimeSpan(14, 0, 0, 0),
-                Name = testMissionName,
-                Tasks = [
+                {
+                    RobotId = robotId,
+                    InstallationCode = installationCode,
+                    AreaName = areaName,
+                    DesiredStartTime = DateTime.SpecifyKind(new DateTime(3050, 1, 1), DateTimeKind.Utc),
+                    InspectionFrequency = new TimeSpan(14, 0, 0, 0),
+                    Name = testMissionName,
+                    Tasks = [
                     new()
                     {
-                        RobotPose = new Pose(),
-                        Inspections = [],
-                        InspectionTarget = new Position(),
-                        TaskOrder = 0
-                    }
+                    RobotPose = new Pose(),
+                    Inspections = [],
+                    InspectionTarget = new Position(),
+                    TaskOrder = 0
+                }
                 ]
             };
             var content = new StringContent(

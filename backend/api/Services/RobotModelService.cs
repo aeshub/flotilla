@@ -42,15 +42,9 @@ namespace Api.Services
             }
         }
 
-        public async Task<IEnumerable<RobotModel>> ReadAll()
-        {
-            return await GetRobotModels().ToListAsync();
-        }
+        public async Task<IEnumerable<RobotModel>> ReadAll() { return await GetRobotModels().ToListAsync(); }
 
-        private DbSet<RobotModel> GetRobotModels()
-        {
-            return _context.RobotModels;
-        }
+        private DbSet<RobotModel> GetRobotModels() { return _context.RobotModels; }
 
         public async Task<RobotModel?> ReadById(string id)
         {

@@ -83,12 +83,11 @@ namespace Api.Controllers
                 logger.LogError(e, "Error deserializing mission from Echo");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            catch (InvalidDataException e)
+            catch (InvalidDataException)
             {
-                string message =
-                    "EchoMission invalid: One or more tags are missing associated robot poses.";
-                logger.LogError(e, message);
-                return StatusCode(StatusCodes.Status502BadGateway, message);
+                const string Message = "EchoMission invalid: One or more tags are missing associated robot poses.";
+                logger.LogError("{Message}", Message);
+                return StatusCode(StatusCodes.Status502BadGateway, Message);
             }
         }
 

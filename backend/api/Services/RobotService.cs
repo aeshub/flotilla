@@ -79,15 +79,9 @@ namespace Api.Services
         public async Task<Robot> UpdateMissionQueueFrozen(string robotId, bool missionQueueFrozen) { return await UpdateRobotProperty(robotId, "MissionQueueFrozen", missionQueueFrozen); }
 
 
-        public async Task<IEnumerable<Robot>> ReadAll()
-        {
-            return await GetRobotsWithSubModels().ToListAsync();
-        }
+        public async Task<IEnumerable<Robot>> ReadAll() { return await GetRobotsWithSubModels().ToListAsync(); }
 
-        public async Task<Robot?> ReadById(string id)
-        {
-            return await GetRobotsWithSubModels().FirstOrDefaultAsync(robot => robot.Id.Equals(id));
-        }
+        public async Task<Robot?> ReadById(string id) { return await GetRobotsWithSubModels().FirstOrDefaultAsync(robot => robot.Id.Equals(id)); }
 
         public async Task<Robot?> ReadByIsarId(string isarId)
         {
@@ -95,10 +89,7 @@ namespace Api.Services
                 .FirstOrDefaultAsync(robot => robot.IsarId.Equals(isarId));
         }
 
-        public async Task<IEnumerable<string>> ReadAllActivePlants()
-        {
-            return await context.Robots.Where(r => r.Enabled).Select(r => r.CurrentInstallation).ToListAsync();
-        }
+        public async Task<IEnumerable<string>> ReadAllActivePlants() { return await context.Robots.Where(r => r.Enabled).Select(r => r.CurrentInstallation).ToListAsync(); }
 
         public async Task<Robot> Update(Robot robot)
         {
@@ -169,9 +160,6 @@ namespace Api.Services
                 .ThenInclude(area => area != null ? area.SafePositions : null);
         }
 
-        private IQueryable<Robot> GetEnabledRobotsWithSubModels()
-        {
-            return GetRobotsWithSubModels().Where(r => r.Enabled && r.Status != RobotStatus.Deprecated);
-        }
+        private IQueryable<Robot> GetEnabledRobotsWithSubModels() { return GetRobotsWithSubModels().Where(r => r.Enabled && r.Status != RobotStatus.Deprecated); }
     }
 }

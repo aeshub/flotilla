@@ -10,9 +10,9 @@ namespace Api.Controllers
     [Route("timeseries")]
     [Authorize(Roles = Role.Any)]
     public class TimeseriesController(
-            ILogger<TimeseriesController> logger,
-            ITimeseriesService timeseriesService
-        ) : ControllerBase
+        ILogger<TimeseriesController> logger,
+        ITimeseriesService timeseriesService
+    ) : ControllerBase
     {
         /// <summary>
         /// Get pressure timeseries

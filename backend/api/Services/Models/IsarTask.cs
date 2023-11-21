@@ -21,9 +21,9 @@
                 "cancelled" => IsarTaskStatus.Cancelled,
                 "paused" => IsarTaskStatus.Paused,
                 _
-                  => throw new ArgumentException(
-                      $"Failed to parse task status '{status}' - not supported"
-                  )
+                    => throw new ArgumentException(
+                        $"Failed to parse task status '{status}' - not supported"
+                    )
             };
         }
     }

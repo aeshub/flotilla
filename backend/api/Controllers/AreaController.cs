@@ -4,24 +4,23 @@ using Api.Services;
 using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 namespace Api.Controllers
 {
     [ApiController]
     [Route("areas")]
     public class AreaController(
-            ILogger<AreaController> logger,
-            IMapService mapService,
-            IAreaService areaService,
-            IDefaultLocalizationPoseService defaultLocalizationPoseService,
-            IMissionDefinitionService missionDefinitionService
-        ) : ControllerBase
+        ILogger<AreaController> logger,
+        IMapService mapService,
+        IAreaService areaService,
+        IDefaultLocalizationPoseService defaultLocalizationPoseService,
+        IMissionDefinitionService missionDefinitionService
+    ) : ControllerBase
     {
         /// <summary>
-        /// Add a new area
+        ///     Add a new area
         /// </summary>
         /// <remarks>
-        /// <para> This query adds a new area to the database </para>
+        ///     <para> This query adds a new area to the database </para>
         /// </remarks>
         [HttpPost]
         [Authorize(Roles = Role.Admin)]
@@ -40,7 +39,7 @@ namespace Api.Controllers
                 if (existingArea != null)
                 {
                     logger.LogWarning("An area for given name and installation already exists");
-                    return Conflict($"Area already exists");
+                    return Conflict("Area already exists");
                 }
 
                 var newArea = await areaService.Create(area);
@@ -63,10 +62,10 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Add safe position to an area
+        ///     Add safe position to an area
         /// </summary>
         /// <remarks>
-        /// <para> This query adds a new safe position to the database </para>
+        ///     <para> This query adds a new safe position to the database </para>
         /// </remarks>
         [HttpPost]
         [Authorize(Roles = Role.Admin)]
@@ -92,19 +91,16 @@ namespace Api.Controllers
                         and name '{name}'", installationCode, areaName);
                     if (area.Deck == null || area.Plant == null || area.Installation == null)
                     {
-                        string errorMessage = "Deck, plant or installation missing from area";
-                        logger.LogWarning(errorMessage);
-                        return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                        const string ErrorMessage = "Deck, plant or installation missing from area";
+                        logger.LogWarning("{Message}", ErrorMessage);
+                        return StatusCode(StatusCodes.Status500InternalServerError, ErrorMessage);
                     }
                     var response = new AreaResponse(area);
 
-                    return CreatedAtAction(nameof(GetAreaById), new { id = area.Id }, response); ;
+                    return CreatedAtAction(nameof(GetAreaById), new { id = area.Id }, response);
                 }
-                else
-                {
-                    logger.LogInformation(@"No area with installation {installationCode} and name {areaName} could be found.", installationCode, areaName);
-                    return NotFound(@$"No area with installation {installationCode} and name {areaName} could be found.");
-                }
+                logger.LogInformation(@"No area with installation {installationCode} and name {areaName} could be found.", installationCode, areaName);
+                return NotFound(@$"No area with installation {installationCode} and name {areaName} could be found.");
             }
             catch (Exception e)
             {
@@ -114,10 +110,10 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Updates default localization pose
+        ///     Updates default localization pose
         /// </summary>
         /// <remarks>
-        /// <para> This query updates the default localization pose for a deck </para>
+        ///     <para> This query updates the default localization pose for a deck </para>
         /// </remarks>
         [HttpPut]
         [Authorize(Roles = Role.Admin)]
@@ -162,7 +158,7 @@ namespace Api.Controllers
 
 
         /// <summary>
-        /// Deletes the area with the specified id from the database.
+        ///     Deletes the area with the specified id from the database.
         /// </summary>
         [HttpDelete]
         [Authorize(Roles = Role.Admin)]
@@ -175,14 +171,13 @@ namespace Api.Controllers
         public async Task<ActionResult<AreaResponse>> DeleteArea([FromRoute] string id)
         {
             var area = await areaService.Delete(id);
-            if (area is null)
-                return NotFound($"Area with id {id} not found");
+            if (area is null) return NotFound($"Area with id {id} not found");
 
             if (area.Deck == null || area.Plant == null || area.Installation == null)
             {
-                string errorMessage = "Deck, plant or installation missing from area";
-                logger.LogWarning(errorMessage);
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                const string ErrorMessage = "Deck, plant or installation missing from area";
+                logger.LogWarning("{Message}", ErrorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ErrorMessage);
             }
 
             var response = new AreaResponse(area);
@@ -190,10 +185,10 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// List all installation areas in the Flotilla database
+        ///     List all installation areas in the Flotilla database
         /// </summary>
         /// <remarks>
-        /// <para> This query gets all installation areas </para>
+        ///     <para> This query gets all installation areas </para>
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = Role.Any)]
@@ -218,7 +213,7 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Lookup area by specified id.
+        ///     Lookup area by specified id.
         /// </summary>
         [HttpGet]
         [Authorize(Roles = Role.Any)]
@@ -233,14 +228,13 @@ namespace Api.Controllers
             try
             {
                 var area = await areaService.ReadById(id);
-                if (area == null)
-                    return NotFound($"Could not find area with id {id}");
+                if (area == null) return NotFound($"Could not find area with id {id}");
 
                 if (area.Deck == null || area.Plant == null || area.Installation == null)
                 {
-                    string errorMessage = "Deck, plant or installation missing from area";
-                    logger.LogWarning(errorMessage);
-                    return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                    const string ErrorMessage = "Deck, plant or installation missing from area";
+                    logger.LogWarning("{Message}", ErrorMessage);
+                    return StatusCode(StatusCodes.Status500InternalServerError, ErrorMessage);
                 }
 
                 var response = new AreaResponse(area);
@@ -254,7 +248,7 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Lookup area by specified deck id.
+        ///     Lookup area by specified deck id.
         /// </summary>
         [HttpGet]
         [Authorize(Roles = Role.Any)]
@@ -269,8 +263,7 @@ namespace Api.Controllers
             try
             {
                 var areas = await areaService.ReadByDeckId(deckId);
-                if (!areas.Any())
-                    return NotFound($"Could not find area for deck with id {deckId}");
+                if (!areas.Any()) return NotFound($"Could not find area for deck with id {deckId}");
 
                 var response = areas.Select(area => new AreaResponse(area!));
                 return Ok(response);
@@ -283,7 +276,7 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Lookup all the mission definitions related to an area
+        ///     Lookup all the mission definitions related to an area
         /// </summary>
         [HttpGet]
         [Authorize(Roles = Role.Any)]
@@ -298,8 +291,7 @@ namespace Api.Controllers
             try
             {
                 var area = await areaService.ReadById(id);
-                if (area == null)
-                    return NotFound($"Could not find area with id {id}");
+                if (area == null) return NotFound($"Could not find area with id {id}");
 
                 var missionDefinitions = await missionDefinitionService.ReadByAreaId(area.Id);
                 var missionDefinitionResponses = missionDefinitions.FindAll(m => !m.IsDeprecated).Select(m => new CondensedMissionDefinitionResponse(m));
@@ -313,7 +305,7 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Gets map metadata for localization poses belonging to area with specified id
+        ///     Gets map metadata for localization poses belonging to area with specified id
         /// </summary>
         [HttpGet]
         [Authorize(Roles = Role.Any)]
@@ -334,9 +326,9 @@ namespace Api.Controllers
             }
             if (area.Installation == null)
             {
-                string errorMessage = "Installation missing from area";
-                logger.LogWarning(errorMessage);
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                const string ErrorMessage = "Installation missing from area";
+                logger.LogWarning("{Message}", ErrorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ErrorMessage);
             }
 
             if (area.DefaultLocalizationPose is null)
@@ -351,10 +343,7 @@ namespace Api.Controllers
             {
                 area.DefaultLocalizationPose.Pose.Position
             };
-            try
-            {
-                mapMetadata = await mapService.ChooseMapFromPositions(positions, area.Installation.InstallationCode);
-            }
+            try { mapMetadata = await mapService.ChooseMapFromPositions(positions, area.Installation.InstallationCode); }
             catch (RequestFailedException e)
             {
                 string errorMessage = $"An error occurred while retrieving the map for area {area.Id}";
@@ -368,10 +357,7 @@ namespace Api.Controllers
                 return NotFound(errorMessage);
             }
 
-            if (mapMetadata == null)
-            {
-                return NotFound("A map which contained at least half of the points in this mission could not be found");
-            }
+            if (mapMetadata == null) return NotFound("A map which contained at least half of the points in this mission could not be found");
             return Ok(mapMetadata);
         }
     }

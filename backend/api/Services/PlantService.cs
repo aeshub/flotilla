@@ -37,10 +37,7 @@ namespace Api.Services
     )]
     public class PlantService(FlotillaDbContext context, IInstallationService installationService) : IPlantService
     {
-        public async Task<IEnumerable<Plant>> ReadAll()
-        {
-            return await GetPlants().ToListAsync();
-        }
+        public async Task<IEnumerable<Plant>> ReadAll() { return await GetPlants().ToListAsync(); }
 
         public async Task<Plant?> ReadById(string id)
         {
@@ -116,9 +113,6 @@ namespace Api.Services
             return plant;
         }
 
-        private IQueryable<Plant> GetPlants()
-        {
-            return context.Plants.Include(i => i.Installation);
-        }
+        private IQueryable<Plant> GetPlants() { return context.Plants.Include(i => i.Installation); }
     }
 }

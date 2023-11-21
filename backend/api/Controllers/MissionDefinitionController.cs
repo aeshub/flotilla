@@ -9,7 +9,8 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("missions/definitions")]
-    public class MissionDefinitionController(ILogger<MissionDefinitionController> logger, IMissionDefinitionService missionDefinitionService, IMissionRunService missionRunService) : ControllerBase
+    public class MissionDefinitionController
+        (ILogger<MissionDefinitionController> logger, IMissionDefinitionService missionDefinitionService, IMissionRunService missionRunService) : ControllerBase
     {
         /// <summary>
         ///     List all mission definitions in the Flotilla database
@@ -82,7 +83,7 @@ namespace Api.Controllers
             }
             catch (InvalidDataException e)
             {
-                logger.LogError(e.Message);
+                logger.LogError("{Message}", e.Message);
                 return BadRequest(e.Message);
             }
 

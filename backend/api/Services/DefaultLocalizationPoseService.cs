@@ -26,15 +26,9 @@ namespace Api.Services
     )]
     public class DefaultLocalizationPoseService(FlotillaDbContext context) : IDefaultLocalizationPoseService
     {
-        public async Task<IEnumerable<DefaultLocalizationPose>> ReadAll()
-        {
-            return await GetDefaultLocalizationPoses().ToListAsync();
-        }
+        public async Task<IEnumerable<DefaultLocalizationPose>> ReadAll() { return await GetDefaultLocalizationPoses().ToListAsync(); }
 
-        private DbSet<DefaultLocalizationPose> GetDefaultLocalizationPoses()
-        {
-            return context.DefaultLocalizationPoses;
-        }
+        private DbSet<DefaultLocalizationPose> GetDefaultLocalizationPoses() { return context.DefaultLocalizationPoses; }
 
         public async Task<DefaultLocalizationPose?> ReadById(string id)
         {

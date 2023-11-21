@@ -9,13 +9,13 @@ namespace Api.Controllers
     [ApiController]
     [Route("decks")]
     public class DeckController(
-            ILogger<DeckController> logger,
-            IDeckService deckService,
-            IDefaultLocalizationPoseService defaultLocalizationPoseService,
-            IInstallationService installationService,
-            IPlantService plantService,
-            IMissionDefinitionService missionDefinitionService
-        ) : ControllerBase
+        ILogger<DeckController> logger,
+        IDeckService deckService,
+        IDefaultLocalizationPoseService defaultLocalizationPoseService,
+        IInstallationService installationService,
+        IPlantService plantService,
+        IMissionDefinitionService missionDefinitionService
+    ) : ControllerBase
     {
         /// <summary>
         /// List all decks in the Flotilla database

@@ -19,9 +19,9 @@
                 "failed" => IsarStepStatus.Failed,
                 "cancelled" => IsarStepStatus.Cancelled,
                 _
-                  => throw new ArgumentException(
-                      $"Failed to parse step status '{status}' - not supported"
-                  )
+                    => throw new ArgumentException(
+                        $"Failed to parse step status '{status}' - not supported"
+                    )
             };
         }
 
@@ -38,9 +38,9 @@
                 "Localize" => IsarStepType.Localize,
                 "MoveArm" => IsarStepType.MoveArm,
                 _
-                  => throw new ArgumentException(
-                      $"Failed to parse step type '{isarClassName}' - not supported"
-                  )
+                    => throw new ArgumentException(
+                        $"Failed to parse step type '{isarClassName}' - not supported"
+                    )
             };
         }
     }

@@ -35,7 +35,6 @@ namespace Api.Controllers
             foreach (var robot in robots)
             {
                 emergencyActionService.TriggerEmergencyButtonPressedForRobot(new EmergencyButtonPressedForRobotEventArgs(robot.Id));
-
             }
 
             return NoContent();
