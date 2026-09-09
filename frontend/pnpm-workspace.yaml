@@ -3,4 +3,7 @@ allowBuilds:
   esbuild: true
 minimumReleaseAge: 7200
 overrides:
+  '@vitest/mocker@>=2.1.0 <4.1.11': '>=4.1.11'
   esbuild@>=0.27.3 <0.28.1: '>=0.28.1'
+  js-yaml@>=4.0.0 <4.3.2: '>=4.3.2'
+  vitest@>=2.1.0 <4.1.11: '>=4.1.11'
